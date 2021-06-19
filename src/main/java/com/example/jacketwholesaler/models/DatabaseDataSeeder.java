@@ -4,6 +4,7 @@ import com.example.jacketwholesaler.models.entities.*;
 import com.example.jacketwholesaler.models.enums.Color;
 import com.example.jacketwholesaler.models.enums.Size;
 import com.example.jacketwholesaler.repositories.CustomerRepository;
+import com.example.jacketwholesaler.repositories.DiscountRepository;
 import com.example.jacketwholesaler.repositories.EmployeeRepository;
 import com.example.jacketwholesaler.repositories.JacketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private final JacketRepository jacketRepository;
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
+    private final DiscountRepository  discountRepository;
 
     //DataFiles
     private final String jacketFile = "src/main/resources/static/dbseeder/jacket.txt";
@@ -34,6 +36,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private final String customerServEmpFile = "src/main/resources/static/dbseeder/customer_service_employee.txt";
     private final String normalCustomerFile = "src/main/resources/static/dbseeder/normal_customer.txt";
     private final String companyFile = "src/main/resources/static/dbseeder/company.txt";
+    private final String discountFile = "src/main/resources/static/dbseeder/discount.txt";
 
     //Lists
     private List<Jacket> jackets = new ArrayList<>();
@@ -41,6 +44,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private List<CustomerServiceEmployee> customerServiceEmployees = new ArrayList<>();
     private List<NormalCustomer> normalCustomers = new ArrayList<>();
     private List<Company> companies = new ArrayList<>();
+    private List<Discount> discounts = new ArrayList<>();
 
     //Others
     private final String delimiter = ";";
@@ -50,10 +54,11 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private String[] dividedLine;
 
     @Autowired
-    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository) {
+    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, DiscountRepository discountRepository) {
         this.jacketRepository = jacketRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
+        this.discountRepository = discountRepository;
     }
 
     @Override
@@ -68,6 +73,8 @@ public class DatabaseDataSeeder implements CommandLineRunner {
         loadNormalCustomers(normalCustomerIS);
         FileReader companiesIS = new FileReader(companyFile);
         loadCompanies(companiesIS);
+        FileReader discountIS = new FileReader(discountFile);
+        loadDiscounts(discountIS);
     }
 
     private void loadJackets(FileReader jacketIS) throws IOException {
@@ -176,6 +183,17 @@ public class DatabaseDataSeeder implements CommandLineRunner {
             Company company = new Company(dividedLine[0], dividedLine[1], dividedLine[2], dividedLine[3]);
             companies.add(company);
             customerRepository.save(company);
+        }
+    }
+
+    private void loadDiscounts(FileReader discountIS) throws IOException {
+        bfr = new BufferedReader(discountIS);
+        while((line = bfr.readLine()) != null) {
+            dividedLine = line.split(delimiter);
+
+            Discount discount = new Discount(Integer.parseInt(dividedLine[0]), Integer.parseInt(dividedLine[1]));
+            discounts.add(discount);
+            discountRepository.save(discount);
         }
     }
 }
