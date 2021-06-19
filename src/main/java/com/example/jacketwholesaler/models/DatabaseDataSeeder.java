@@ -3,10 +3,7 @@ package com.example.jacketwholesaler.models;
 import com.example.jacketwholesaler.models.entities.*;
 import com.example.jacketwholesaler.models.enums.Color;
 import com.example.jacketwholesaler.models.enums.Size;
-import com.example.jacketwholesaler.repositories.CustomerRepository;
-import com.example.jacketwholesaler.repositories.DiscountRepository;
-import com.example.jacketwholesaler.repositories.EmployeeRepository;
-import com.example.jacketwholesaler.repositories.JacketRepository;
+import com.example.jacketwholesaler.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -29,6 +26,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private final EmployeeRepository employeeRepository;
     private final CustomerRepository customerRepository;
     private final DiscountRepository  discountRepository;
+    private final WarehouseRepository  warehouseRepository;
 
     //DataFiles
     private final String jacketFile = "src/main/resources/static/dbseeder/jacket.txt";
@@ -37,6 +35,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private final String normalCustomerFile = "src/main/resources/static/dbseeder/normal_customer.txt";
     private final String companyFile = "src/main/resources/static/dbseeder/company.txt";
     private final String discountFile = "src/main/resources/static/dbseeder/discount.txt";
+    private final String warehouseFile = "src/main/resources/static/dbseeder/warehouse.txt";
 
     //Lists
     private List<Jacket> jackets = new ArrayList<>();
@@ -45,6 +44,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private List<NormalCustomer> normalCustomers = new ArrayList<>();
     private List<Company> companies = new ArrayList<>();
     private List<Discount> discounts = new ArrayList<>();
+    private List<Warehouse> warehouses = new ArrayList<>();
 
     //Others
     private final String delimiter = ";";
@@ -54,11 +54,12 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private String[] dividedLine;
 
     @Autowired
-    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, DiscountRepository discountRepository) {
+    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, DiscountRepository discountRepository, WarehouseRepository warehouseRepository) {
         this.jacketRepository = jacketRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
         this.discountRepository = discountRepository;
+        this.warehouseRepository = warehouseRepository;
     }
 
     @Override
@@ -75,6 +76,8 @@ public class DatabaseDataSeeder implements CommandLineRunner {
         loadCompanies(companiesIS);
         FileReader discountIS = new FileReader(discountFile);
         loadDiscounts(discountIS);
+        FileReader warehouseIS = new FileReader(warehouseFile);
+        loadWarehouses(warehouseIS);
     }
 
     private void loadJackets(FileReader jacketIS) throws IOException {
@@ -194,6 +197,23 @@ public class DatabaseDataSeeder implements CommandLineRunner {
             Discount discount = new Discount(Integer.parseInt(dividedLine[0]), Integer.parseInt(dividedLine[1]));
             discounts.add(discount);
             discountRepository.save(discount);
+        }
+    }
+
+    private void loadWarehouses(FileReader warehouseIS) throws IOException {
+        bfr = new BufferedReader(warehouseIS);
+        while((line = bfr.readLine()) != null) {
+            dividedLine = line.split(delimiter);
+            Warehouse warehouse;
+
+            if(dividedLine.length == 4) {
+                warehouse = new Warehouse(dividedLine[0], Integer.parseInt(dividedLine[1]), Integer.parseInt(dividedLine[2]), dividedLine[3]);
+            } else {
+                warehouse = new Warehouse(dividedLine[0], Integer.parseInt(dividedLine[1]), dividedLine[2]);
+            }
+
+            warehouses.add(warehouse);
+            warehouseRepository.save(warehouse);
         }
     }
 }

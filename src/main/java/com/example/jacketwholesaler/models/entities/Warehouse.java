@@ -15,18 +15,23 @@ public class Warehouse extends EntityBase {
     @Column
     private Integer apartmentNumber;
 
+    @Column(nullable = false)
+    private String city;
+
     public Warehouse() {
     }
 
-    public Warehouse(String streetName, int streetNumber) {
+    public Warehouse(String streetName, int streetNumber, String city) {
         this.streetName = streetName;
         this.streetNumber = streetNumber;
+        this.city = city;
     }
 
-    public Warehouse(String streetName, int streetNumber, Integer apartmentNumber) {
+    public Warehouse(String streetName, int streetNumber, Integer apartmentNumber, String city) {
         this.streetName = streetName;
         this.streetNumber = streetNumber;
         this.apartmentNumber = apartmentNumber;
+        this.city = city;
     }
 
     public String getStreetName() {

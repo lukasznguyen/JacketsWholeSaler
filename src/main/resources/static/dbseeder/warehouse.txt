@@ -1,0 +1,3 @@
+Koszykowa;86;5;Warszawa
+Marszałkowska;35;Raszyn
+Grójecka;31;45;Warszawa
