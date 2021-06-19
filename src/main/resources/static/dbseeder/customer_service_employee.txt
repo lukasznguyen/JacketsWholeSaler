@@ -1,0 +1,5 @@
+Ania;Lewandowska;82090869428;3800;2020-01-01;100;polish,english,german
+Monika;Kowalczyk;63122734697;3800;2020-01-15;polish
+Julia;Kamińska;90010141798;3500;2021-03-23;100;polish,english,italy
+Karolina;Nowak;91020571434;3700;2020-07-30;polish
+Aleksandra;Polańska;46032821279;3500;2021-04-03;polish

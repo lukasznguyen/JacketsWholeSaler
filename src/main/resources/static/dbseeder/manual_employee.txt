@@ -1,0 +1,5 @@
+Jan;Janowski;57102669325;2800;2021-01-01;false
+Karol;Karolowski;50041668747;2800;2021-01-15;100;true
+Michał;Michałowski;70080385681;3000;2020-01-25;100;true
+Filip;Filipowski;94052723932;2900;2020-07-23;false
+Tomasz;Tomaszewski;48112234919;2800;2020-10-15;100;true
