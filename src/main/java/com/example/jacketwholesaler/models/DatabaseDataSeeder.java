@@ -1,10 +1,9 @@
 package com.example.jacketwholesaler.models;
 
-import com.example.jacketwholesaler.models.entities.CustomerServiceEmployee;
-import com.example.jacketwholesaler.models.entities.Jacket;
-import com.example.jacketwholesaler.models.entities.ManualEmployee;
+import com.example.jacketwholesaler.models.entities.*;
 import com.example.jacketwholesaler.models.enums.Color;
 import com.example.jacketwholesaler.models.enums.Size;
+import com.example.jacketwholesaler.repositories.CustomerRepository;
 import com.example.jacketwholesaler.repositories.EmployeeRepository;
 import com.example.jacketwholesaler.repositories.JacketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +26,21 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     //Repositories
     private final JacketRepository jacketRepository;
     private final EmployeeRepository employeeRepository;
+    private final CustomerRepository customerRepository;
 
     //DataFiles
     private final String jacketFile = "src/main/resources/static/dbseeder/jacket.txt";
     private final String manualEmpFile = "src/main/resources/static/dbseeder/manual_employee.txt";
     private final String customerServEmpFile = "src/main/resources/static/dbseeder/customer_service_employee.txt";
+    private final String normalCustomerFile = "src/main/resources/static/dbseeder/normal_customer.txt";
+    private final String companyFile = "src/main/resources/static/dbseeder/company.txt";
 
     //Lists
     private List<Jacket> jackets = new ArrayList<>();
     private List<ManualEmployee> manualEmployees = new ArrayList<>();
     private List<CustomerServiceEmployee> customerServiceEmployees = new ArrayList<>();
+    private List<NormalCustomer> normalCustomers = new ArrayList<>();
+    private List<Company> companies = new ArrayList<>();
 
     //Others
     private final String delimiter = ";";
@@ -46,9 +50,10 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private String[] dividedLine;
 
     @Autowired
-    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository) {
+    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository) {
         this.jacketRepository = jacketRepository;
         this.employeeRepository = employeeRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -59,6 +64,10 @@ public class DatabaseDataSeeder implements CommandLineRunner {
         loadManualEmps(manualEmpIS);
         FileReader customerSerEmpIS = new FileReader(customerServEmpFile);
         loadCustomerSerEmps(customerSerEmpIS);
+        FileReader normalCustomerIS = new FileReader(normalCustomerFile);
+        loadNormalCustomers(normalCustomerIS);
+        FileReader companiesIS = new FileReader(companyFile);
+        loadCompanies(companiesIS);
     }
 
     private void loadJackets(FileReader jacketIS) throws IOException {
@@ -145,6 +154,28 @@ public class DatabaseDataSeeder implements CommandLineRunner {
 
             customerServiceEmployees.add(customerSerEmployee);
             employeeRepository.save(customerSerEmployee);
+        }
+    }
+
+    private void loadNormalCustomers(FileReader normalCustomerIS) throws IOException {
+        bfr = new BufferedReader(normalCustomerIS);
+        while((line = bfr.readLine()) != null) {
+            dividedLine = line.split(delimiter);
+
+            NormalCustomer normalCustomer = new NormalCustomer(dividedLine[0], dividedLine[1], dividedLine[2], dividedLine[3], dividedLine[4]);
+            normalCustomers.add(normalCustomer);
+            customerRepository.save(normalCustomer);
+        }
+    }
+
+    private void loadCompanies(FileReader companiesIS) throws IOException {
+        bfr = new BufferedReader(companiesIS);
+        while((line = bfr.readLine()) != null) {
+            dividedLine = line.split(delimiter);
+
+            Company company = new Company(dividedLine[0], dividedLine[1], dividedLine[2], dividedLine[3]);
+            companies.add(company);
+            customerRepository.save(company);
         }
     }
 }
