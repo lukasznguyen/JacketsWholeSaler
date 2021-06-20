@@ -2,6 +2,7 @@ package com.example.jacketwholesaler.models.entities;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,9 @@ public class Carton extends EntityBase {
 
     @OneToMany(mappedBy = "carton", cascade = { CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST })
     private List<Packet> packet = new ArrayList<>();
+
+    @ManyToOne
+    private Warehouse warehouse;
 
     public Carton() {
     }
@@ -27,4 +31,11 @@ public class Carton extends EntityBase {
         return packet.size();
     }
 
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
 }

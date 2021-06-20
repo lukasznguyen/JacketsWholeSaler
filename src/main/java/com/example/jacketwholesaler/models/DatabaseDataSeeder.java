@@ -30,6 +30,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private final WarehouseRepository  warehouseRepository;
     private final QuantityJacketRepository quantityJacketRepository;
     private final PacketRepository packetRepository;
+    private final CartonRepository cartonRepository;
 
     //DataFiles
     private final String jacketFile = "src/main/resources/static/dbseeder/jacket.txt";
@@ -41,6 +42,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private final String warehouseFile = "src/main/resources/static/dbseeder/warehouse.txt";
     private final String quantityJacketFile = "src/main/resources/static/dbseeder/quantity_jacket.txt";
     private final String packetFile = "src/main/resources/static/dbseeder/packet.txt";
+    private final String cartonFile = "src/main/resources/static/dbseeder/carton.txt";
 
     //Lists
     private List<Jacket> jackets = new ArrayList<>();
@@ -52,16 +54,17 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private List<Warehouse> warehouses = new ArrayList<>();
     private List<QuantityJacket> quantityJackets = new ArrayList<>();
     private List<Packet> packets = new ArrayList<>();
+    private List<Carton> cartons = new ArrayList<>();
 
     //Others
     private final String delimiter = ";";
-    private final String languagesDelimiter = ",";
+    private final String secondDelimiter = ",";
     private BufferedReader bfr;
     private String line;
     private String[] dividedLine;
 
     @Autowired
-    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, DiscountRepository discountRepository, WarehouseRepository warehouseRepository, QuantityJacketRepository quantityJacketRepository, PacketRepository packetRepository) {
+    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, DiscountRepository discountRepository, WarehouseRepository warehouseRepository, QuantityJacketRepository quantityJacketRepository, PacketRepository packetRepository, CartonRepository cartonRepository) {
         this.jacketRepository = jacketRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
@@ -69,6 +72,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
         this.warehouseRepository = warehouseRepository;
         this.quantityJacketRepository = quantityJacketRepository;
         this.packetRepository = packetRepository;
+        this.cartonRepository = cartonRepository;
     }
 
     @Override
@@ -91,6 +95,8 @@ public class DatabaseDataSeeder implements CommandLineRunner {
         loadQuantityJackets(quantityJacketIS);
         FileReader packetIS = new FileReader(packetFile);
         loadPackets(packetIS);
+        FileReader cartonIS = new FileReader(cartonFile);
+        loadCartons(cartonIS);
     }
 
     private void loadJackets(FileReader jacketIS) throws IOException {
@@ -170,9 +176,9 @@ public class DatabaseDataSeeder implements CommandLineRunner {
             CustomerServiceEmployee customerSerEmployee;
 
             if(dividedLine.length == 7) {
-                customerSerEmployee = new CustomerServiceEmployee(dividedLine[0], dividedLine[1], dividedLine[2], Double.parseDouble(dividedLine[3]), LocalDate.parse(dividedLine[4]), Double.parseDouble(dividedLine[5]), Arrays.asList(dividedLine[6].split(languagesDelimiter)));
+                customerSerEmployee = new CustomerServiceEmployee(dividedLine[0], dividedLine[1], dividedLine[2], Double.parseDouble(dividedLine[3]), LocalDate.parse(dividedLine[4]), Double.parseDouble(dividedLine[5]), Arrays.asList(dividedLine[6].split(secondDelimiter)));
             } else {
-                customerSerEmployee = new CustomerServiceEmployee(dividedLine[0], dividedLine[1], dividedLine[2], Double.parseDouble(dividedLine[3]), LocalDate.parse(dividedLine[4]), Arrays.asList(dividedLine[5].split(languagesDelimiter)));
+                customerSerEmployee = new CustomerServiceEmployee(dividedLine[0], dividedLine[1], dividedLine[2], Double.parseDouble(dividedLine[3]), LocalDate.parse(dividedLine[4]), Arrays.asList(dividedLine[5].split(secondDelimiter)));
             }
 
             customerServiceEmployees.add(customerSerEmployee);
@@ -258,6 +264,32 @@ public class DatabaseDataSeeder implements CommandLineRunner {
             }
             packets.add(packet);
             packetRepository.save(packet);
+        }
+    }
+
+    private void loadCartons(FileReader cartonIS) throws IOException {
+        bfr = new BufferedReader(cartonIS);
+        while((line = bfr.readLine()) != null) {
+            dividedLine = line.split(delimiter);
+            String[] separetedCartons = dividedLine[0].split(secondDelimiter);
+            Carton carton = new Carton();
+            for (String s : separetedCartons) {
+                Optional<Packet> packet = packetRepository.findById(Long.parseLong(s));
+                if(packet.isEmpty()) {
+                    throw new RuntimeException("Error in input data");
+                }
+                carton.getPacket().add(packet.get());
+            }
+
+            Optional<Warehouse> warehouse = warehouseRepository.findById(Long.parseLong(dividedLine[1]));
+            if(warehouse.isEmpty()) {
+                throw new RuntimeException("Error in input data");
+            }
+
+            carton.setWarehouse(warehouse.get());
+
+            cartons.add(carton);
+            cartonRepository.save(carton);
         }
     }
 }

@@ -1,7 +1,11 @@
 package com.example.jacketwholesaler.models.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Warehouse extends EntityBase {
@@ -17,6 +21,9 @@ public class Warehouse extends EntityBase {
 
     @Column(nullable = false)
     private String city;
+
+    @OneToMany(mappedBy = "warehouse",  cascade = { CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST })
+    private List<Carton> cartons = new ArrayList<>();
 
     public Warehouse() {
     }
@@ -56,5 +63,21 @@ public class Warehouse extends EntityBase {
 
     public void setApartmentNumber(Integer apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public List<Carton> getCartons() {
+        return cartons;
+    }
+
+    public void setCartons(List<Carton> cartons) {
+        this.cartons = cartons;
     }
 }
