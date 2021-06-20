@@ -3,10 +3,9 @@ package com.example.jacketwholesaler.models.entities;
 import com.example.jacketwholesaler.models.enums.Color;
 import com.example.jacketwholesaler.models.enums.Size;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Jacket extends EntityBase {
@@ -24,6 +23,9 @@ public class Jacket extends EntityBase {
 
     @Column(nullable = false)
     private double price;
+
+    @OneToMany(mappedBy = "jacket")
+    List<QuantityJacket> quantityJackets = new ArrayList<>();
 
     public Jacket() {
     }
@@ -65,5 +67,13 @@ public class Jacket extends EntityBase {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public List<QuantityJacket> getQuantityJackets() {
+        return quantityJackets;
+    }
+
+    public void setQuantityJackets(List<QuantityJacket> quantityJackets) {
+        this.quantityJackets = quantityJackets;
     }
 }
