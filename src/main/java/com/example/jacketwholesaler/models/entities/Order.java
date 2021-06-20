@@ -6,6 +6,7 @@ import com.example.jacketwholesaler.models.enums.PaymentMethod;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Max;
@@ -46,6 +47,9 @@ public class Order extends EntityBase {
 
     @Column
     private Integer apartmentNumber;
+
+    @ManyToOne
+    private Customer customer;
 
     public Order() {
     }
@@ -148,5 +152,13 @@ public class Order extends EntityBase {
 
     public void setApartmentNumber(Integer apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }
