@@ -15,6 +15,9 @@ public class Packet extends EntityBase {
     @JoinTable(name = "packet_quantityjackets", joinColumns = { @JoinColumn(name = "packet_id") }, inverseJoinColumns = { @JoinColumn(name = "quantityjackets_id") })
     private List<QuantityJacket> quantityJackets = new ArrayList<>();
 
+    @ManyToOne
+    private Carton carton;
+
     public Packet() {
     }
 
@@ -58,5 +61,13 @@ public class Packet extends EntityBase {
             }
         }
         return result;
+    }
+
+    public Carton getCarton() {
+        return carton;
+    }
+
+    public void setCarton(Carton carton) {
+        this.carton = carton;
     }
 }
