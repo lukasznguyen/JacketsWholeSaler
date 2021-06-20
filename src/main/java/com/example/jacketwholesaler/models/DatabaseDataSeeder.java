@@ -29,6 +29,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private final DiscountRepository  discountRepository;
     private final WarehouseRepository  warehouseRepository;
     private final QuantityJacketRepository quantityJacketRepository;
+    private final PacketRepository packetRepository;
 
     //DataFiles
     private final String jacketFile = "src/main/resources/static/dbseeder/jacket.txt";
@@ -39,6 +40,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private final String discountFile = "src/main/resources/static/dbseeder/discount.txt";
     private final String warehouseFile = "src/main/resources/static/dbseeder/warehouse.txt";
     private final String quantityJacketFile = "src/main/resources/static/dbseeder/quantity_jacket.txt";
+    private final String packetFile = "src/main/resources/static/dbseeder/packet.txt";
 
     //Lists
     private List<Jacket> jackets = new ArrayList<>();
@@ -49,6 +51,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private List<Discount> discounts = new ArrayList<>();
     private List<Warehouse> warehouses = new ArrayList<>();
     private List<QuantityJacket> quantityJackets = new ArrayList<>();
+    private List<Packet> packets = new ArrayList<>();
 
     //Others
     private final String delimiter = ";";
@@ -58,13 +61,14 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     private String[] dividedLine;
 
     @Autowired
-    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, DiscountRepository discountRepository, WarehouseRepository warehouseRepository, QuantityJacketRepository quantityJacketRepository) {
+    public DatabaseDataSeeder(JacketRepository jacketRepository, EmployeeRepository employeeRepository, CustomerRepository customerRepository, DiscountRepository discountRepository, WarehouseRepository warehouseRepository, QuantityJacketRepository quantityJacketRepository, PacketRepository packetRepository) {
         this.jacketRepository = jacketRepository;
         this.employeeRepository = employeeRepository;
         this.customerRepository = customerRepository;
         this.discountRepository = discountRepository;
         this.warehouseRepository = warehouseRepository;
         this.quantityJacketRepository = quantityJacketRepository;
+        this.packetRepository = packetRepository;
     }
 
     @Override
@@ -85,6 +89,8 @@ public class DatabaseDataSeeder implements CommandLineRunner {
         loadWarehouses(warehouseIS);
         FileReader quantityJacketIS = new FileReader(quantityJacketFile);
         loadQuantityJackets(quantityJacketIS);
+        FileReader packetIS = new FileReader(packetFile);
+        loadPackets(packetIS);
     }
 
     private void loadJackets(FileReader jacketIS) throws IOException {
@@ -238,6 +244,20 @@ public class DatabaseDataSeeder implements CommandLineRunner {
 
             quantityJackets.add(quantityJacket);
             quantityJacketRepository.save(quantityJacket);
+        }
+    }
+
+    private void loadPackets(FileReader packetIS) throws IOException {
+        bfr = new BufferedReader(packetIS);
+        while((line = bfr.readLine()) != null) {
+            dividedLine = line.split(delimiter);
+
+            Packet packet = new Packet();
+            for (String s : dividedLine) {
+                packet.getQuantityJackets().add(quantityJackets.get(Integer.parseInt(s)-1));
+            }
+            packets.add(packet);
+            packetRepository.save(packet);
         }
     }
 }
