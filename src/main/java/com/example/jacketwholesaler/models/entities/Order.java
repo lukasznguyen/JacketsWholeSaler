@@ -53,6 +53,9 @@ public class Order extends EntityBase {
     @OneToMany(mappedBy = "order")
     private List<Discount> discounts = new ArrayList<>();
 
+    @ManyToOne
+    private CustomerServiceEmployee employee;
+
     public Order() {
     }
 
@@ -162,5 +165,21 @@ public class Order extends EntityBase {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<Discount> getDiscounts() {
+        return discounts;
+    }
+
+    public void setDiscounts(List<Discount> discounts) {
+        this.discounts = discounts;
+    }
+
+    public CustomerServiceEmployee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(CustomerServiceEmployee employee) {
+        this.employee = employee;
     }
 }
