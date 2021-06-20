@@ -4,11 +4,10 @@ import com.example.jacketwholesaler.models.enums.DocumentType;
 import com.example.jacketwholesaler.models.enums.OrderStatus;
 import com.example.jacketwholesaler.models.enums.PaymentMethod;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -50,6 +49,9 @@ public class Order extends EntityBase {
 
     @ManyToOne
     private Customer customer;
+
+    @OneToMany(mappedBy = "order")
+    private List<Discount> discounts = new ArrayList<>();
 
     public Order() {
     }
