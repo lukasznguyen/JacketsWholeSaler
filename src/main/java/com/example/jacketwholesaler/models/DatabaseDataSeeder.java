@@ -79,6 +79,8 @@ public class DatabaseDataSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         FileReader jacketIS = new FileReader(jacketFile);
         loadJackets(jacketIS);
+        FileReader warehouseIS = new FileReader(warehouseFile);
+        loadWarehouses(warehouseIS);
         FileReader manualEmpIS = new FileReader(manualEmpFile);
         loadManualEmps(manualEmpIS);
         FileReader customerSerEmpIS = new FileReader(customerServEmpFile);
@@ -89,8 +91,6 @@ public class DatabaseDataSeeder implements CommandLineRunner {
         loadCompanies(companiesIS);
         FileReader discountIS = new FileReader(discountFile);
         loadDiscounts(discountIS);
-        FileReader warehouseIS = new FileReader(warehouseFile);
-        loadWarehouses(warehouseIS);
         FileReader quantityJacketIS = new FileReader(quantityJacketFile);
         loadQuantityJackets(quantityJacketIS);
         FileReader packetIS = new FileReader(packetFile);
@@ -164,6 +164,10 @@ public class DatabaseDataSeeder implements CommandLineRunner {
                 manualEmployee = new ManualEmployee(dividedLine[0], dividedLine[1], dividedLine[2], Double.parseDouble(dividedLine[3]), LocalDate.parse(dividedLine[4]), Boolean.parseBoolean(dividedLine[5]));
             }
 
+            //Warehouse - ManualEmployee relation
+            int random = (int) (Math.random()*warehouses.size());
+            manualEmployee.setWarehouse(warehouses.get(random));
+
             manualEmployees.add(manualEmployee);
             employeeRepository.save(manualEmployee);
         }
@@ -230,7 +234,6 @@ public class DatabaseDataSeeder implements CommandLineRunner {
             } else {
                 warehouse = new Warehouse(dividedLine[0], Integer.parseInt(dividedLine[1]), dividedLine[2]);
             }
-
             warehouses.add(warehouse);
             warehouseRepository.save(warehouse);
         }

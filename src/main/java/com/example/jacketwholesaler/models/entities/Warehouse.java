@@ -25,6 +25,9 @@ public class Warehouse extends EntityBase {
     @OneToMany(mappedBy = "warehouse",  cascade = { CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST })
     private List<Carton> cartons = new ArrayList<>();
 
+    @OneToMany(mappedBy = "warehouse")
+    private List<ManualEmployee> manualEmployees = new ArrayList<>();
+
     public Warehouse() {
     }
 

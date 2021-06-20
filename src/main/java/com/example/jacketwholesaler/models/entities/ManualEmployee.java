@@ -2,6 +2,7 @@ package com.example.jacketwholesaler.models.entities;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Entity
@@ -9,6 +10,9 @@ import java.time.LocalDate;
 public class ManualEmployee extends Employee {
 
     private boolean hasForkliftLicense;
+
+    @ManyToOne
+    private Warehouse warehouse;
 
     public ManualEmployee() {
     }
@@ -29,5 +33,13 @@ public class ManualEmployee extends Employee {
 
     public void setHasForkliftLicense(boolean hasForkliftLicense) {
         this.hasForkliftLicense = hasForkliftLicense;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
     }
 }
