@@ -1,8 +1,8 @@
 package com.example.jacketwholesaler.models.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class QuantityJacket extends EntityBase {
@@ -12,6 +12,10 @@ public class QuantityJacket extends EntityBase {
 
     @ManyToOne
     private Jacket jacket;
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "packet_quantityjackets", joinColumns = { @JoinColumn(name = "quantityjackets_id") }, inverseJoinColumns = { @JoinColumn(name = "packet_id") })
+    private List<Packet> packets = new ArrayList<>();
 
     public QuantityJacket() {
     }
