@@ -56,6 +56,9 @@ public class Order extends EntityBase {
     @ManyToOne
     private CustomerServiceEmployee employee;
 
+    @OneToMany(mappedBy = "order")
+    private List<OrderPacket> packets =  new ArrayList<>();
+
     public Order() {
     }
 
@@ -181,5 +184,13 @@ public class Order extends EntityBase {
 
     public void setEmployee(CustomerServiceEmployee employee) {
         this.employee = employee;
+    }
+
+    public List<OrderPacket> getPackets() {
+        return packets;
+    }
+
+    public void setPackets(List<OrderPacket> packets) {
+        this.packets = packets;
     }
 }

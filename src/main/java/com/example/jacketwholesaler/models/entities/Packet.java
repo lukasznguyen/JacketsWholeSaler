@@ -18,6 +18,9 @@ public class Packet extends EntityBase {
     @ManyToOne(cascade = CascadeType.REMOVE)
     private Carton carton;
 
+    @OneToMany(mappedBy = "packet")
+    private List<OrderPacket> orderPackets =  new ArrayList<>();
+
     public Packet() {
     }
 
@@ -69,5 +72,13 @@ public class Packet extends EntityBase {
 
     public void setCarton(Carton carton) {
         this.carton = carton;
+    }
+
+    public List<OrderPacket> getOrderPackets() {
+        return orderPackets;
+    }
+
+    public void setOrderPackets(List<OrderPacket> orderPackets) {
+        this.orderPackets = orderPackets;
     }
 }
