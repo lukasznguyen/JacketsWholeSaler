@@ -22,7 +22,7 @@ public class Warehouse extends EntityBase {
     @Column(nullable = false)
     private String city;
 
-    @OneToMany(mappedBy = "warehouse",  cascade = { CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST })
+    @OneToMany(mappedBy = "warehouse",  cascade = CascadeType.ALL)
     private List<Carton> cartons = new ArrayList<>();
 
     @OneToMany(mappedBy = "warehouse")

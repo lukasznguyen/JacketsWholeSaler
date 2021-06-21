@@ -10,10 +10,10 @@ public class QuantityJacket extends EntityBase {
     @Column(nullable = false)
     private int quantity;
 
-    @ManyToOne
+    @ManyToOne()
     private Jacket jacket;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany()
     @JoinTable(name = "packet_quantityjackets", joinColumns = { @JoinColumn(name = "quantityjackets_id") }, inverseJoinColumns = { @JoinColumn(name = "packet_id") })
     private List<Packet> packets = new ArrayList<>();
 

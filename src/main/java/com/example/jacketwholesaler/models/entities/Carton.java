@@ -10,10 +10,10 @@ import java.util.List;
 @Entity
 public class Carton extends EntityBase {
 
-    @OneToMany(mappedBy = "carton", cascade = { CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST })
+    @OneToMany(mappedBy = "carton", cascade = CascadeType.REMOVE)
     private List<Packet> packet = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne()
     private Warehouse warehouse;
 
     public Carton() {

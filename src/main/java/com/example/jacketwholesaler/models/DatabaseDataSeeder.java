@@ -281,6 +281,7 @@ public class DatabaseDataSeeder implements CommandLineRunner {
                 if(packet.isEmpty()) {
                     throw new RuntimeException("Error in input data");
                 }
+                packet.get().setCarton(carton);
                 carton.getPacket().add(packet.get());
             }
 

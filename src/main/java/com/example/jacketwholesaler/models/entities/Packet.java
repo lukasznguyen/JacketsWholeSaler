@@ -11,11 +11,11 @@ import static com.example.jacketwholesaler.models.enums.Size.S;
 @Entity
 public class Packet extends EntityBase {
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "packet_quantityjackets", joinColumns = { @JoinColumn(name = "packet_id") }, inverseJoinColumns = { @JoinColumn(name = "quantityjackets_id") })
     private List<QuantityJacket> quantityJackets = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Carton carton;
 
     public Packet() {
